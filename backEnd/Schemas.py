@@ -8,7 +8,7 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    id : Optional[str] = None
+    id : Optional[int] = None
 
 
 class User(BaseModel):
@@ -20,10 +20,14 @@ class login(BaseModel):
     email: EmailStr
     password: str
 
-
 class create_user(User):
     password: str
 
 
 class UserInDB(User):
     password: str
+
+class listings(BaseModel):
+    title: str
+    description: str
+    images: list

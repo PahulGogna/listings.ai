@@ -27,12 +27,11 @@ def create_user(user_data:Schemas.create_user,db: Session = Depends(get_db)):
     db.refresh(new_user)
     return new_user
 
-
 @router.post('/login')
 def user_login(payLoad: OAuth2PasswordRequestForm = Depends(),db: Session = Depends(get_db)):
     user = db.query(models.Users).filter(models.Users.email == payLoad.username).first()
     if not user:
-        raise HTTPException(status.HTTP_404_NOT_FOUND,detail="Invalid Credentials")
+        raise HTTPException(status.HTTP_403_FORBIDDEN,detail="Invalid Credentials")
     
     if verify(payLoad.password, user.password):
 
@@ -40,8 +39,7 @@ def user_login(payLoad: OAuth2PasswordRequestForm = Depends(),db: Session = Depe
 
         return {"Token":created_token, "token_type":"bearer"}
     
-    return {"user not found"}
-
+    raise HTTPException(status.HTTP_403_FORBIDDEN,detail="Invalid Credentials")
     
 @router.post('/logout')
 def user_logout():

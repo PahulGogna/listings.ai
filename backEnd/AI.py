@@ -1,10 +1,9 @@
 import google.generativeai as genai
 import os
 from PIL import Image
-from config import config
 from rembg import remove
 
-genai.configure(api_key=config.get('googleApiKey'))
+genai.configure(api_key=os.environ.get("googleApiKey"))
 model = genai.GenerativeModel('gemini-pro')
 img_model = genai.GenerativeModel('gemini-pro-vision')
 

@@ -1,0 +1,93 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listings Form</title>
+</head>
+<body>
+    <h1>Create a Listing</h1>
+    <form action="/listing" method="POST" enctype="multipart/form-data">
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" required><br>
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description" required></textarea><br>
+        <label for="images">Images:</label><br>
+        <input type="file" id="images" name="images" accept="image/*" multiple required><br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Description AI</title>
+    <style>
+        /* Add your CSS styles here */
+        #image-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #description {
+            text-align: center;
+            font-size: 18px;
+        }
+        #uploaded-image {
+            max-width: 100%;
+            max-height: 400px; /* Adjust as needed */
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="image-container">
+        <h2>Upload Image</h2>
+        <input type="file" accept="image/*" id="image-input">
+        <button onclick="uploadImage()">Submit</button>
+    </div>
+
+    <div id="description"></div>
+    <img id="uploaded-image" src="" alt="Uploaded Image">
+
+    <script>
+        function uploadImage() {
+            const fileInput = document.getElementById('image-input');
+            const file = fileInput.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('image', file);
+
+                fetch('/api/describe-image', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    displayImage(file);
+                    displayDescription(data.description);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        }
+
+        function displayImage(file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const imageElement = document.getElementById('uploaded-image');
+                imageElement.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function displayDescription(description) {
+            const descriptionElement = document.getElementById('description');
+            descriptionElement.innerHTML = `<h2>Image Description:</h2><p>${description}</p>`;
+        }
+    </script>
+</body>
+</html>
